@@ -68,7 +68,7 @@
                    <tr>
                        <td>{{$loop->iteration}}</td>
                        <td>{{$hospital->name}}</td>
-                       <td>
+                       <td class="d-flex">
                            <a href="javascript:void(0)" onclick="confirmDelete({{$hospital->id}})" class="btn btn-danger btn-sm">
                                <i class="fa-solid fa-trash"></i>
                            </a>
@@ -77,6 +77,9 @@
                                @method('delete')
                            </form>
 
+                           <a href="{{route('categorys.edit',$hospital->id)}}" class=" ml-2 btn btn-success">
+                               <i class="fa fa-edit"></i>
+                           </a>
                        </td>
                    </tr>
                        @endforeach

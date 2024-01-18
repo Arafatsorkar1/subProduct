@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Hospitals;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,8 @@ class HomepageController extends Controller
 
     public function index()
     {
-        return  view('');
+        $hospitals = Hospitals::all();
+        return  view('hospital.show',compact('hospitals'));
     }
 
     /**
@@ -47,7 +49,9 @@ class HomepageController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $hospital = Hospitals::find($id);
+        $departments = Department::where('hospital_id',$id)->get();
+        return view('hospital.ShowDetails',compact('hospital','departments'));
     }
 
     /**
@@ -55,7 +59,8 @@ class HomepageController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $hospital = Hospitals::find($id);
+        return view('hospital.edit', compact('hospital'));
     }
 
     /**
@@ -63,7 +68,11 @@ class HomepageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       $hospital = Hospitals::find($id);
+       $hospital->update([
+           'name'=> $request->name
+       ]);
+       return redirect()->route('home')->with('msg','Hospital Update Successfully');
     }
 
     /**
@@ -71,8 +80,19 @@ class HomepageController extends Controller
      */
     public function destroy(string $id)
     {
+
+
+
         $category = Hospitals::find($id);
+        if ($category) {
+            $category->departments()->delete();
+
+        }
+
         $category->delete();
+
+
+
         return redirect()->back()->with('noti' , 'Subscription Category Delete Successfully');
     }
 }
